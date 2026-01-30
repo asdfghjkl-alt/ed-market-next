@@ -12,7 +12,7 @@ export const auth = betterAuth({
   database: mongodbAdapter(db, { client }),
   // We mirror the "User" model fields here so Better Auth knows about them
   user: {
-    modelName: "user", // Explicitly match the collection name "user" from user.model.ts
+    modelName: "users", // Explicitly match the collection name "user" from user.model.ts
     additionalFields: {
       role: {
         type: "string",

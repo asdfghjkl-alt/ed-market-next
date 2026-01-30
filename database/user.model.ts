@@ -1,18 +1,26 @@
-import mongoose from "mongoose";
+import mongoose, { model, models } from "mongoose";
 
-const UserSchema = new mongoose.Schema(
-  {
-    name: String,
-    email: String,
-    image: String,
-    emailVerified: Boolean,
-    role: String,
-    createdAt: Date,
-    updatedAt: Date,
-  },
-  { collection: "user" },
-);
+export interface IUser {
+  name: string;
+  email: string;
+  image: string;
+  emailVerified: boolean;
+  role: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-const User = mongoose.model("User", UserSchema);
+const UserSchema = new mongoose.Schema<IUser>({
+  name: String,
+  email: String,
+  image: String,
+  emailVerified: Boolean,
+  role: String,
+  createdAt: Date,
+  updatedAt: Date,
+});
+
+// Avoid recompilation in hot-reload
+const User = models.User || model<IUser>("User", UserSchema);
 
 export default User;

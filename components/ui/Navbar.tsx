@@ -5,6 +5,7 @@ import CartLink from "./CartLink";
 import Image from "next/image";
 import { signOut, useSession } from "@/utils/auth-client";
 import Dropdown from "./Dropdown";
+import api from "@/lib/axios";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -23,15 +24,13 @@ const sellerLinks = [{ href: "/products/manage", label: "Manage Products" }];
 export const linkBaseClass =
   "tracking-wide px-5 py-2 rounded-xl text-teal-50 hover:bg-sky-600 transition-colors";
 
-export default function Navbar() {
+export default function Navbar({ categories = [] }: { categories?: any[] }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((open) => !open);
   const closeMenu = () => setIsMenuOpen(false);
 
   const { data: session, isPending } = useSession();
-
-  console.log(session?.user);
 
   const userElements = [
     <button
@@ -78,6 +77,13 @@ export default function Navbar() {
                 {link.label}
               </NavLink>
             ))}
+            <Dropdown
+              title={"Product Categories"}
+              links={categories.map((category) => ({
+                href: `/products?category=${category.name}`,
+                label: category.name,
+              }))}
+            />
 
             {isPending ? (
               <nav>Loading...</nav>
@@ -201,6 +207,15 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
+          <Dropdown
+            title={"Product Categories"}
+            links={categories.map((category) => ({
+              href: `/products?category=${category.name}`,
+              label: category.name,
+            }))}
+            fullWidth
+            onItemClick={closeMenu}
+          />
           {isPending ? (
             <nav>Loading...</nav>
           ) : session ? (
