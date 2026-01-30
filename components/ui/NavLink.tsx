@@ -11,7 +11,12 @@ interface NavLinkProps {
   className?: string | (({ isActive }: { isActive: boolean }) => string);
 }
 
-export function NavLink({ href, children, onClick, className }: NavLinkProps) {
+export default function NavLink({
+  href,
+  children,
+  onClick,
+  className,
+}: NavLinkProps) {
   const pathname = usePathname();
   const isActive = pathname === href;
 

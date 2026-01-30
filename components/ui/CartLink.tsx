@@ -1,6 +1,6 @@
 import { linkBaseClass } from "./Navbar";
 import type { MouseEventHandler } from "react";
-import { NavLink } from "./NavLink";
+import NavLink from "./NavLink";
 import Image from "next/image";
 
 export default function CartLink({

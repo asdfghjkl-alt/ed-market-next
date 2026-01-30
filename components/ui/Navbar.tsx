@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
-import { NavLink } from "./NavLink";
+import NavLink from "./NavLink";
 import CartLink from "./CartLink";
 import Image from "next/image";
+import { signOut, useSession } from "@/utils/auth-client";
+import Dropdown from "./Dropdown";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -27,8 +29,15 @@ export default function Navbar() {
   const toggleMenu = () => setIsMenuOpen((open) => !open);
   const closeMenu = () => setIsMenuOpen(false);
 
+  const { data: session, isPending } = useSession();
+
+  console.log(session?.user);
+
   const userElements = [
-    <button className="block w-full text-left text-sm font-bold text-gray-300 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden">
+    <button
+      onClick={() => signOut()}
+      className="block w-full text-left text-sm font-bold text-gray-300 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
+    >
       Logout
     </button>,
   ];
@@ -70,17 +79,36 @@ export default function Navbar() {
               </NavLink>
             ))}
 
-            {unauthLinks.map((link) => (
-              <NavLink
-                key={link.href}
-                href={link.href}
-                className={({ isActive }) =>
-                  `${linkBaseClass} ${isActive ? "bg-sky-500" : "bg-sky-700"}`
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
+            {isPending ? (
+              <nav>Loading...</nav>
+            ) : session ? (
+              <>
+                <Dropdown
+                  elements={userElements}
+                  title={`Welcome ${session.user.name}`}
+                  links={authLinks}
+                />
+                {session.user?.role === "admin" && (
+                  <Dropdown
+                    title="Admin Tools"
+                    links={adminLinks}
+                    onItemClick={closeMenu}
+                  />
+                )}
+              </>
+            ) : (
+              unauthLinks.map((link) => (
+                <NavLink
+                  key={link.href}
+                  href={link.href}
+                  className={({ isActive }) =>
+                    `${linkBaseClass} ${isActive ? "bg-sky-500" : "bg-sky-700"}`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              ))
+            )}
           </nav>
 
           <CartLink onClick={closeMenu} />
@@ -173,18 +201,30 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
-          {unauthLinks.map((link) => (
-            <NavLink
-              key={link.href}
-              href={link.href}
-              className={({ isActive }) =>
-                `${linkBaseClass} ${isActive ? "bg-sky-500" : "bg-sky-700"}`
-              }
-              onClick={closeMenu}
-            >
-              {link.label}
-            </NavLink>
-          ))}
+          {isPending ? (
+            <nav>Loading...</nav>
+          ) : session ? (
+            <Dropdown
+              elements={userElements}
+              title={`Welcome ${session.user.name}`}
+              links={authLinks}
+              fullWidth
+              onItemClick={closeMenu}
+            />
+          ) : (
+            unauthLinks.map((link) => (
+              <NavLink
+                key={link.href}
+                href={link.href}
+                className={({ isActive }) =>
+                  `${linkBaseClass} ${isActive ? "bg-sky-500" : "bg-sky-700"}`
+                }
+                onClick={closeMenu}
+              >
+                {link.label}
+              </NavLink>
+            ))
+          )}
         </nav>
       </div>
     </header>

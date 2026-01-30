@@ -9,6 +9,7 @@ import { AxiosError } from "axios";
 import InputField from "@/components/ui/inputs/InputField";
 import { redirect } from "next/navigation";
 import { signIn } from "@/utils/auth-client";
+import { useSession } from "@/utils/auth-client";
 
 const loginSchema = Joi.object({
   email: Joi.string().required().email().messages({
