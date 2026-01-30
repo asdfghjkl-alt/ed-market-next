@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@layer base {
+  input {
+    @apply my-1 size-full rounded-xl border-2 border-solid border-gray-400 p-3 text-lg;
+  }
+  textarea {
+    @apply my-1 size-full rounded-xl border-2 border-solid border-gray-400 p-3 text-lg;
+  }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  h1 {
+    @apply text-5xl font-semibold;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  h2 {
+    @apply text-2xl font-semibold;
+  }
+
+  h3 {
+    @apply text-xl font-semibold;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .btn {
+    @apply cursor-pointer rounded-lg border p-2 transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-35;
+  }
+
+  .btn-submit {
+    @apply bg-emerald-600 text-emerald-100;
+  }
+
+  .btn-manage {
+    @apply bg-blue-600 text-blue-100;
+  }
+
+  .btn-edit {
+    @apply bg-yellow-500 text-yellow-100;
+  }
+
+  .btn-delete {
+    @apply bg-rose-500 text-rose-100;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
