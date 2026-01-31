@@ -204,9 +204,11 @@ export default function ProductForm({
             )}
           </div>
           <div className="mb-4 text-left">
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              Existing Images
-            </label>
+            {product && (
+              <label className="mb-1 block text-sm font-medium text-gray-700">
+                Existing Images
+              </label>
+            )}
             <div className="mb-4 grid grid-cols-3 gap-4">
               {product &&
                 product.images.map((img, index) => (

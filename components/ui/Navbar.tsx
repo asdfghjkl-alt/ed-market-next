@@ -17,7 +17,7 @@ const adminLinks = [
   { href: "/products/manage", label: "Manage Products" },
   { href: "/categories/manage", label: "Manage Categories" },
   { href: "/orders/manage", label: "Manage Orders" },
-  { href: "/auth/manage", label: "Manage Users" },
+  { href: "/users/manage", label: "Manage Users" },
 ];
 const sellerLinks = [{ href: "/products/manage", label: "Manage Products" }];
 
@@ -78,6 +78,7 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
               </NavLink>
             ))}
             <Dropdown
+              id="desktop-categories"
               title={"Product Categories"}
               links={categories.map((category) => ({
                 href: `/products?category=${category.name}`,
@@ -90,15 +91,24 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
             ) : session ? (
               <>
                 <Dropdown
+                  id="desktop-user-menu"
                   elements={userElements}
                   title={`Welcome ${session.user.name}`}
                   links={authLinks}
                 />
                 {session.user?.role === "seller" && (
-                  <Dropdown title="Seller Tools" links={sellerLinks} />
+                  <Dropdown
+                    id="desktop-seller-tools"
+                    title="Seller Tools"
+                    links={sellerLinks}
+                  />
                 )}
                 {session.user?.role === "admin" && (
-                  <Dropdown title="Admin Tools" links={adminLinks} />
+                  <Dropdown
+                    id="desktop-admin-tools"
+                    title="Admin Tools"
+                    links={adminLinks}
+                  />
                 )}
               </>
             ) : (
@@ -207,6 +217,7 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
             </NavLink>
           ))}
           <Dropdown
+            id="mobile-categories"
             title={"Product Categories"}
             links={categories.map((category) => ({
               href: `/products?category=${category.name}`,
@@ -220,6 +231,7 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
           ) : session ? (
             <>
               <Dropdown
+                id="mobile-user-menu"
                 elements={userElements}
                 title={`Welcome ${session.user.name}`}
                 links={authLinks}
@@ -228,6 +240,7 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
               />
               {session.user?.role === "seller" && (
                 <Dropdown
+                  id="mobile-seller-tools"
                   title="Seller Tools"
                   links={sellerLinks}
                   onItemClick={closeMenu}
@@ -236,6 +249,7 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
               )}
               {session.user?.role === "admin" && (
                 <Dropdown
+                  id="mobile-admin-tools"
                   title="Admin Tools"
                   links={adminLinks}
                   onItemClick={closeMenu}

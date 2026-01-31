@@ -1,15 +1,19 @@
+"use client";
+
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import type { ReactNode } from "react";
 import NavLink from "./NavLink";
 
 export default function Dropdown({
+  id,
   title,
   elements = [],
   links,
   fullWidth = false,
   onItemClick,
 }: {
+  id: string;
   title: string;
   elements?: ReactNode[];
   links: { href: string; label: string }[];
@@ -22,6 +26,7 @@ export default function Dropdown({
       className={fullWidth ? "block w-full" : "relative inline-block"}
     >
       <MenuButton
+        id={id}
         className={`inline-flex w-full gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-white/20 ${
           fullWidth ? "justify-between" : "justify-center"
         }`}

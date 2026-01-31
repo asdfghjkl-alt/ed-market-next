@@ -1,6 +1,7 @@
 import mongoose, { model, models } from "mongoose";
 
 export interface IUser {
+  _id: string;
   name: string;
   email: string;
   image: string;
@@ -17,10 +18,8 @@ const UserSchema = new mongoose.Schema<IUser>(
     image: String,
     emailVerified: Boolean,
     role: String,
-    createdAt: Date,
-    updatedAt: Date,
   },
-  { collection: "user" },
+  { collection: "user", timestamps: true },
 );
 
 // Avoid recompilation in hot-reload
