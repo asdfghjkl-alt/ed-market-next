@@ -24,14 +24,14 @@ export default async function ProductDetails({
     let product = await Product.findById(id).populate({
       path: "seller",
       model: User,
-      select: "email",
+      select: "email name",
     });
 
     if (!product) {
       return notFound();
     }
 
-    product = product.toObject();
+    product = JSON.parse(JSON.stringify(product));
 
     const displayUnit =
       product?.unit !== "each" ? product?.unit : ` ${product?.unit}`;

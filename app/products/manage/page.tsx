@@ -29,6 +29,8 @@ export default async function ManageProducts() {
     products = await Product.find({ seller: session.user.id });
   }
 
+  products = JSON.parse(JSON.stringify(products));
+
   return (
     <div className="m-6">
       <div className="mb-4 grid grid-cols-2 items-center justify-between">

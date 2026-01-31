@@ -8,48 +8,60 @@ import { AxiosError } from "axios";
 import InputField from "@/components/ui/inputs/InputField";
 import api from "@/lib/axios";
 import TextArea from "@/components/ui/inputs/TextArea";
-import type { ProductFormData, ProductUnit } from "@/database/product.model";
+import type {
+  PassedProductData,
+  ProductFormData,
+  ProductUnit,
+} from "@/database/product.model";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
 const allowedUnits = ["g", "kg", "ml", "L", "each"] as ProductUnit[];
 
-// Joi Schema to provide custom validation software
-const productSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "string.empty": "Please enter a name",
-  }),
-  price: Joi.number().multiple(0.01).required().greater(0).messages({
-    "number.multiple": "Price can only have 2 decimal places",
-    "number.greater": "Price must be greater than 0",
-    "number.base": "Please enter a quantity",
-  }),
-  quantity: Joi.number().multiple(0.001).required().greater(0).messages({
-    "number.multiple": "Quantity can only have 3 decimal places",
-    "number.greater": "Quantity must be greater than 0",
-    "number.base": "Please enter a quantity",
-  }),
-  category: Joi.string().required().messages({
-    "string.empty": "Please enter a category",
-  }),
-  images: Joi.array().min(1).required().messages({
-    "array.min": "Please upload at least one image",
-  }),
-  unit: Joi.string()
-    .valid(...allowedUnits)
-    .required()
-    .messages({
-      "string.empty": "Please enter a unit",
-      "any.only":
-        "Unit must be one of the following: " + allowedUnits.join(", "),
+export default function ProductForm({
+  categories,
+  product,
+}: {
+  categories: string[];
+  product?: PassedProductData;
+}) {
+  // Joi Schema to provide custom validation software
+  const productSchema = Joi.object({
+    name: Joi.string().required().messages({
+      "string.empty": "Please enter a name",
     }),
-  description: Joi.string().required().messages({
-    "string.empty": "Please enter a description",
-  }),
-});
+    price: Joi.number().multiple(0.01).required().greater(0).messages({
+      "number.multiple": "Price can only have 2 decimal places",
+      "number.greater": "Price must be greater than 0",
+      "number.base": "Please enter a quantity",
+    }),
+    quantity: Joi.number().multiple(0.001).required().greater(0).messages({
+      "number.multiple": "Quantity can only have 3 decimal places",
+      "number.greater": "Quantity must be greater than 0",
+      "number.base": "Please enter a quantity",
+    }),
+    category: Joi.string().required().messages({
+      "string.empty": "Please enter a category",
+    }),
+    images: product
+      ? Joi.array()
+      : Joi.array().min(1).required().messages({
+          "array.min": "Please upload at least one image",
+        }),
+    unit: Joi.string()
+      .valid(...allowedUnits)
+      .required()
+      .messages({
+        "string.empty": "Please enter a unit",
+        "any.only":
+          "Unit must be one of the following: " + allowedUnits.join(", "),
+      }),
+    description: Joi.string().required().messages({
+      "string.empty": "Please enter a description",
+    }),
+  });
 
-export default function AddProducts({ categories }: { categories: string[] }) {
   const router = useRouter();
   const {
     register,
@@ -62,12 +74,12 @@ export default function AddProducts({ categories }: { categories: string[] }) {
     resolver: joiResolver(productSchema),
     mode: "onTouched",
     defaultValues: {
-      name: "",
-      price: 0,
-      quantity: 0,
-      unit: allowedUnits[0],
+      name: product?.name || "",
+      price: product?.price || 0,
+      quantity: product?.quantity || 0,
+      unit: product?.unit || allowedUnits[0],
       images: [],
-      description: "",
+      description: product?.description || "",
     },
   });
 
@@ -96,11 +108,14 @@ export default function AddProducts({ categories }: { categories: string[] }) {
       }
       formData.append("description", data.description);
 
-      const res = await api.post("/products", formData);
+      if (product) {
+        const res = await api.put(`/products/${product._id}`, formData);
+        toast.success(res.data.message);
+      } else {
+        const res = await api.post("/products", formData);
+        toast.success(res.data.message);
+      }
       setIsSubmitting(false);
-
-      toast.success(res.data.message);
-
       router.push("/products/manage");
     } catch (e) {
       setIsSubmitting(false);
@@ -117,7 +132,7 @@ export default function AddProducts({ categories }: { categories: string[] }) {
   return (
     <div className="flex min-h-screen w-full items-center justify-center">
       <div className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-md">
-        <h3>Add a product</h3>
+        <h3>{product ? "Edit product" : "Add a product"}</h3>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <InputField
             name="name"
@@ -189,11 +204,28 @@ export default function AddProducts({ categories }: { categories: string[] }) {
             )}
           </div>
           <div className="mb-4 text-left">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Existing Images
+            </label>
+            <div className="mb-4 grid grid-cols-3 gap-4">
+              {product &&
+                product.images.map((img, index) => (
+                  <div key={index} className="relative inline-block">
+                    <Image
+                      src={img.thumbnail!}
+                      alt={`Existing Image ${index}`}
+                      width={100}
+                      height={100}
+                      className="h-24 w-full rounded border border-gray-200 object-cover"
+                    />
+                  </div>
+                ))}
+            </div>
             <label
               htmlFor="images"
               className="mb-1 block text-sm font-medium text-gray-700"
             >
-              Upload Image
+              Upload Images
             </label>
             <input
               type="file"
@@ -264,7 +296,13 @@ export default function AddProducts({ categories }: { categories: string[] }) {
             disabled={isSubmitting}
             className="btn btn-submit w-full"
           >
-            {isSubmitting ? "Adding..." : "Add Product"}
+            {product
+              ? isSubmitting
+                ? "Updating..."
+                : "Update Product"
+              : isSubmitting
+                ? "Adding..."
+                : "Add Product"}
           </button>
         </form>
       </div>

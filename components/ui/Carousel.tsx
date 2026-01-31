@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import Image from "next/image";
 import { IImage } from "@/database/product.model";
@@ -33,12 +34,18 @@ export default function Carousel({ images }: { images: IImage[] }) {
   return (
     <div className="group relative m-auto h-[400px] w-full max-w-[600px] px-4 py-4">
       <div className="relative h-full w-full">
-        <Image
-          src={images[currentIndex].main!}
-          alt={`Slide ${currentIndex}`}
-          fill
-          className="rounded-2xl object-contain duration-500"
-        />
+        {images.map((image, index) => (
+          <Image
+            key={index}
+            src={image.display!}
+            alt={`Slide ${index}`}
+            fill
+            priority
+            className={`rounded-2xl object-contain transition-opacity duration-500 ${
+              index === currentIndex ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
       </div>
       {images.length > 1 && (
         <button onClick={prevSlide} type="button">

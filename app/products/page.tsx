@@ -28,9 +28,11 @@ export default async function ProductsView({
   }
 
   // Retrieves all products with filtering
-  const products = await Product.find(filter)
+  const productsData = await Product.find(filter)
     .populate({ path: "category", model: Category })
     .populate({ path: "seller", select: "email", model: User });
+
+  const products = JSON.parse(JSON.stringify(productsData));
 
   return products.length === 0 ? (
     <div className="flex h-screen items-center justify-center">

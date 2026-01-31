@@ -1,6 +1,6 @@
 import Category, { ICategory } from "@/database/category.model";
 import connectToDatabase from "@/lib/mongodb";
-import AddProductForm from "@/components/products/AddProductForm";
+import ProductForm from "@/components/products/ProductForm";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
@@ -19,5 +19,5 @@ export default async function AddProducts() {
     (category: ICategory) => category.name,
   );
 
-  return <AddProductForm categories={passedCategories} />;
+  return <ProductForm categories={passedCategories} />;
 }

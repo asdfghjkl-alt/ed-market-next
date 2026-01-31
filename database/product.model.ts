@@ -2,14 +2,7 @@ import { cloudinary } from "@/lib/cloudinary";
 import { Schema, model, models } from "mongoose";
 import Category, { ICategory } from "./category.model";
 import { IUser } from "./user.model";
-
-export enum ProductUnit {
-  g = "g",
-  kg = "kg",
-  ml = "ml",
-  L = "L",
-  each = "each",
-}
+import { ProductUnit } from "@/types/product";
 
 export interface IImage {
   url: string;
@@ -29,6 +22,17 @@ export interface IProduct {
   images: IImage[];
   seller: IUser;
   category: ICategory;
+  description: string;
+}
+
+export interface PassedProductData {
+  _id: string;
+  name: string;
+  quantity: number;
+  unit: ProductUnit;
+  price: number;
+  images: IImage[];
+  category: string;
   description: string;
 }
 
