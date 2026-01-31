@@ -11,8 +11,8 @@ import TextArea from "@/components/ui/inputs/TextArea";
 import type {
   PassedProductData,
   ProductFormData,
-  ProductUnit,
 } from "@/database/product.model";
+import { ProductUnit } from "@/types/product";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
