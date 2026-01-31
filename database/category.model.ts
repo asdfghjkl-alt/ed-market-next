@@ -5,6 +5,10 @@ export interface ICategory {
   name: string;
 }
 
+export interface CategoryFormData {
+  name: string;
+}
+
 const CategorySchema = new Schema<ICategory>({
   name: {
     type: String,

@@ -35,7 +35,7 @@ export default function UserManageView({
       if (err instanceof AxiosError) {
         toast.error(err.response?.data.message || err.message);
       } else {
-        toast.error(err.message);
+        toast.error("Unexpected error occurred");
       }
     }
   }
