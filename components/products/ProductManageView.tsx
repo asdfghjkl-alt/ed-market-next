@@ -60,7 +60,7 @@ export const ProductManageView = ({
             Edit
           </Link>
         )}
-        <ProductDeleteBtn productId={product._id} />
+        <ProductDeleteBtn productId={product._id.toString()} />
       </div>
     </div>
   );

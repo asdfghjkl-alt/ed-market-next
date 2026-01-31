@@ -35,6 +35,13 @@ export const apiHandler =
         );
       }
 
+      if (error.code === 404) {
+        return NextResponse.json(
+          { message: "Page does not exist" },
+          { status: 404 },
+        );
+      }
+
       return NextResponse.json({ message }, { status: statusCode });
     }
   };

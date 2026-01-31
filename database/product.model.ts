@@ -32,6 +32,16 @@ export interface IProduct {
   description: string;
 }
 
+export interface ProductFormData {
+  name: string;
+  quantity: number;
+  unit: ProductUnit;
+  price: number;
+  images: File[];
+  category: string;
+  description: string;
+}
+
 const imageSchema = new Schema(
   {
     _id: { _id: false },

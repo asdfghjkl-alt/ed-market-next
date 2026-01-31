@@ -1,15 +1,9 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
+import { IImage } from "@/database/product.model";
 
-interface CarouselProps {
-  images: {
-    url: string;
-    main: string;
-    filename: string;
-  }[];
-}
-
-export default function Carousel({ images }: CarouselProps) {
+export default function Carousel({ images }: { images: IImage[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevSlide = () => {
@@ -38,10 +32,14 @@ export default function Carousel({ images }: CarouselProps) {
 
   return (
     <div className="group relative m-auto h-[400px] w-full max-w-[600px] px-4 py-4">
-      <div
-        style={{ backgroundImage: `url(${images[currentIndex].main})` }}
-        className="h-full w-full rounded-2xl bg-contain bg-center bg-no-repeat duration-500"
-      ></div>
+      <div className="relative h-full w-full">
+        <Image
+          src={images[currentIndex].main!}
+          alt={`Slide ${currentIndex}`}
+          fill
+          className="rounded-2xl object-contain duration-500"
+        />
+      </div>
       {images.length > 1 && (
         <button onClick={prevSlide} type="button">
           <div className="absolute top-[50%] left-5 -translate-y-[-50%] cursor-pointer rounded-full bg-black/20 p-2 text-2xl text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">

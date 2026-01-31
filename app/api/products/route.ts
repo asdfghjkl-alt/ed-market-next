@@ -60,10 +60,22 @@ export const POST = apiHandler(async (req: NextRequest) => {
     return NextResponse.json({ message: validateRes.message }, { status: 400 });
   }
 
+  const realCategory = await Category.findOne({
+    name: formData.get("category"),
+  });
+  // Checks that category exists in the database
+  if (!realCategory) {
+    return NextResponse.json(
+      { message: "Category does not exist" },
+      { status: 404 },
+    );
+  }
+
   const images = await processProductImages(files);
 
   const newProduct = await Product.create({
     ...productData,
+    category: realCategory._id,
     seller: session.user.id,
     images,
   });
