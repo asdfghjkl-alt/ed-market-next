@@ -33,12 +33,6 @@ export default async function ManageProducts() {
   }
 
   products = JSON.parse(JSON.stringify(products));
-  products = products.map((product: IProduct) => {
-    return {
-      ...product,
-      category: product.category.name,
-    };
-  });
 
   return (
     <div className="m-6">
@@ -74,7 +68,7 @@ export default async function ManageProducts() {
           <div className="col-span-2">Actions</div>
         </div>
 
-        {products.map((product: PassedProductData) => (
+        {products.map((product: IProduct) => (
           <ProductManageView
             key={product._id}
             product={product}

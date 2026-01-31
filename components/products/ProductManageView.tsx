@@ -6,7 +6,7 @@ export const ProductManageView = ({
   product,
   role,
 }: {
-  product: PassedProductData;
+  product: IProduct;
   role: "seller" | "admin";
 }) => {
   const displayUnit =
@@ -42,7 +42,7 @@ export const ProductManageView = ({
 
       <div className="flex flex-col md:col-span-1">
         <span className="font-bold md:hidden">Category:</span>
-        <span>{product.category || "No Category"}</span>
+        <span>{product.category.name || "No Category"}</span>
       </div>
 
       <div className="flex flex-col md:col-span-2">
