@@ -3,6 +3,10 @@ import Product from "@/database/product.model";
 import connectToDatabase from "@/lib/mongodb";
 import User from "@/database/user.model";
 import { NextRequest, NextResponse } from "next/server";
+import { apiHandler } from "@/lib/api-handler";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { processProductImages, validateImages } from "./helpers";
 
 export async function GET(req: NextRequest) {
   await connectToDatabase();
@@ -33,3 +37,41 @@ export async function GET(req: NextRequest) {
     products,
   });
 }
+
+export const POST = apiHandler(async (req: NextRequest) => {
+  await connectToDatabase();
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session || session.user.role !== "seller") {
+    return NextResponse.json(
+      { message: "Page does not exist" },
+      { status: 404 },
+    );
+  }
+
+  const formData = await req.formData();
+  const productData = Object.fromEntries(formData.entries());
+
+  const files = formData.getAll("images") as File[];
+
+  const validateRes = validateImages(files, 0, 0);
+
+  if (validateRes !== true) {
+    return NextResponse.json({ message: validateRes.message }, { status: 400 });
+  }
+
+  const images = await processProductImages(files);
+
+  const newProduct = await Product.create({
+    ...productData,
+    seller: session.user.id,
+    images,
+  });
+
+  await newProduct.save();
+
+  return NextResponse.json({
+    message: "Successfully added new product",
+    product: newProduct,
+  });
+});

@@ -1,6 +1,7 @@
 import { cloudinary } from "@/lib/cloudinary";
 import { Schema, model, models } from "mongoose";
-import Category from "./category.model";
+import Category, { ICategory } from "./category.model";
+import { IUser } from "./user.model";
 
 export enum ProductUnit {
   g = "g",
@@ -14,9 +15,9 @@ export interface IImage {
   url: string;
   filename: string;
   size: number;
-  thumbnail: string;
-  main: string;
-  display: string;
+  thumbnail?: string;
+  main?: string;
+  display?: string;
 }
 
 export interface IProduct {
@@ -26,8 +27,8 @@ export interface IProduct {
   unit: ProductUnit;
   price: number;
   images: IImage[];
-  seller: Schema.Types.ObjectId;
-  category: Schema.Types.ObjectId;
+  seller: IUser;
+  category: ICategory;
   description: string;
 }
 

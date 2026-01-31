@@ -1,6 +1,11 @@
 import { Schema, model, models } from "mongoose";
 
-const CategorySchema = new Schema({
+export interface ICategory {
+  _id: string;
+  name: string;
+}
+
+const CategorySchema = new Schema<ICategory>({
   name: {
     type: String,
     required: true,
@@ -9,6 +14,7 @@ const CategorySchema = new Schema({
 });
 
 // Avoid recompilation in hot-reload
-const Category = models.Category || model("Category", CategorySchema);
+const Category =
+  models.Category || model<ICategory>("Category", CategorySchema);
 
 export default Category;

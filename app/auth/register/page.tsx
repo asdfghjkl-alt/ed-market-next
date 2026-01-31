@@ -41,6 +41,7 @@ export default function Register() {
     setErrMsg(undefined);
 
     const { data: retrieved, error } = await signUp.email(data);
+
     if (error) {
       setErrMsg(error.message);
       setIsRegistering(false);

@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/ui/Navbar";
 import connectToDatabase from "@/lib/mongodb";
 import Category from "@/database/category.model";
+import { Toaster } from "react-hot-toast";
 
 const schibstedGrotesk = Schibsted_Grotesk({
   variable: "--font-schibsted-grotesk",
@@ -36,6 +37,7 @@ export default async function RootLayout({
         className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased`}
       >
         <Navbar categories={JSON.parse(JSON.stringify(categories))} />
+        <Toaster position="top-center" />
         {children}
       </body>
     </html>

@@ -12,7 +12,7 @@ export const auth = betterAuth({
   database: mongodbAdapter(db, { client }),
   // We mirror the "User" model fields here so Better Auth knows about them
   user: {
-    modelName: "users", // Explicitly match the collection name "user" from user.model.ts
+    modelName: "user", // Explicitly match the collection name "user" from user.model.ts
     additionalFields: {
       role: {
         type: "string",
@@ -31,4 +31,5 @@ export const auth = betterAuth({
       maxAge: 5 * 60,
     },
   },
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 });

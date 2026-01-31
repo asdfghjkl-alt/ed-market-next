@@ -10,15 +10,18 @@ export interface IUser {
   updatedAt: Date;
 }
 
-const UserSchema = new mongoose.Schema<IUser>({
-  name: String,
-  email: String,
-  image: String,
-  emailVerified: Boolean,
-  role: String,
-  createdAt: Date,
-  updatedAt: Date,
-});
+const UserSchema = new mongoose.Schema<IUser>(
+  {
+    name: String,
+    email: String,
+    image: String,
+    emailVerified: Boolean,
+    role: String,
+    createdAt: Date,
+    updatedAt: Date,
+  },
+  { collection: "user" },
+);
 
 // Avoid recompilation in hot-reload
 const User = models.User || model<IUser>("User", UserSchema);

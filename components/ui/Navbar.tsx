@@ -94,12 +94,11 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
                   title={`Welcome ${session.user.name}`}
                   links={authLinks}
                 />
+                {session.user?.role === "seller" && (
+                  <Dropdown title="Seller Tools" links={sellerLinks} />
+                )}
                 {session.user?.role === "admin" && (
-                  <Dropdown
-                    title="Admin Tools"
-                    links={adminLinks}
-                    onItemClick={closeMenu}
-                  />
+                  <Dropdown title="Admin Tools" links={adminLinks} />
                 )}
               </>
             ) : (
@@ -219,13 +218,31 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
           {isPending ? (
             <nav>Loading...</nav>
           ) : session ? (
-            <Dropdown
-              elements={userElements}
-              title={`Welcome ${session.user.name}`}
-              links={authLinks}
-              fullWidth
-              onItemClick={closeMenu}
-            />
+            <>
+              <Dropdown
+                elements={userElements}
+                title={`Welcome ${session.user.name}`}
+                links={authLinks}
+                fullWidth
+                onItemClick={closeMenu}
+              />
+              {session.user?.role === "seller" && (
+                <Dropdown
+                  title="Seller Tools"
+                  links={sellerLinks}
+                  onItemClick={closeMenu}
+                  fullWidth
+                />
+              )}
+              {session.user?.role === "admin" && (
+                <Dropdown
+                  title="Admin Tools"
+                  links={adminLinks}
+                  onItemClick={closeMenu}
+                  fullWidth
+                />
+              )}
+            </>
           ) : (
             unauthLinks.map((link) => (
               <NavLink

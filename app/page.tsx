@@ -6,7 +6,13 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="animate-fade-in-up flex min-h-screen flex-col items-center justify-center p-5 text-center">
-      <Image src="/EdMarket.png" alt="Logo" height={200} width={200} />
+      <Image
+        src="/EdMarket.png"
+        alt="Logo"
+        height={200}
+        width={200}
+        priority={true}
+      />
       <h1 className="mt-4">Welcome to EdMarket!</h1>
       <p className="mt-4 text-xl">
         Your one-stop shop for all your grocery needs.
@@ -41,7 +47,13 @@ export default function Home() {
         href="https://www.linkedin.com/in/edward-liu-50a205267"
         className="btn mt-4 flex items-center"
       >
-        <Image src="/LinkedIn.png" alt="LinkedIn" height={50} width={50} />
+        <Image
+          src="/LinkedIn.png"
+          alt="LinkedIn"
+          height={50}
+          width={40}
+          style={{ width: "auto" }}
+        />
         <p>View Owner's LinkedIn</p>
       </Link>
       <Link
