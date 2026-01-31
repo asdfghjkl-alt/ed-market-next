@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import connectToDatabase from "@/lib/mongodb";
 import { notFound } from "next/navigation";
-import Product, { IProduct } from "@/database/product.model";
+import Product, { IProduct, PassedProductData } from "@/database/product.model";
 import Link from "next/link";
 import { ProductManageView } from "@/components/products/ProductManageView";
 import Category from "@/database/category.model";
@@ -26,10 +26,19 @@ export default async function ManageProducts() {
       model: Category,
     });
   } else {
-    products = await Product.find({ seller: session.user.id });
+    products = await Product.find({ seller: session.user.id }).populate({
+      path: "category",
+      model: Category,
+    });
   }
 
   products = JSON.parse(JSON.stringify(products));
+  products = products.map((product: IProduct) => {
+    return {
+      ...product,
+      category: product.category.name,
+    };
+  });
 
   return (
     <div className="m-6">
@@ -65,7 +74,7 @@ export default async function ManageProducts() {
           <div className="col-span-2">Actions</div>
         </div>
 
-        {products.map((product: IProduct) => (
+        {products.map((product: PassedProductData) => (
           <ProductManageView
             key={product._id}
             product={product}

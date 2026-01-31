@@ -1,4 +1,4 @@
-import { IProduct } from "@/database/product.model";
+import { IProduct, PassedProductData } from "@/database/product.model";
 import Link from "next/link";
 import { ProductDeleteBtn } from "./ProductDeleteBtn";
 
@@ -6,7 +6,7 @@ export const ProductManageView = ({
   product,
   role,
 }: {
-  product: IProduct;
+  product: PassedProductData;
   role: "seller" | "admin";
 }) => {
   const displayUnit =
@@ -42,7 +42,7 @@ export const ProductManageView = ({
 
       <div className="flex flex-col md:col-span-1">
         <span className="font-bold md:hidden">Category:</span>
-        <span>{product.category.name || "No Category"}</span>
+        <span>{product.category || "No Category"}</span>
       </div>
 
       <div className="flex flex-col md:col-span-2">
