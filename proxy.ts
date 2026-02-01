@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+
+  const isDev = process.env.NODE_ENV === "development";
 
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data:;
+    style-src 'self' 'nonce-${nonce}' 'unsafe-inline';
+    img-src 'self' blob: data: https://res.cloudinary.com;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
@@ -30,14 +32,24 @@ export function middleware(request: NextRequest) {
     },
   });
 
-  response.headers.set(
-    "Content-Security-Policy",
-    cspHeader.replace(/\s{2,}/g, " ").trim(),
-  );
+  if (!isDev) {
+    response.headers.set(
+      "Content-Security-Policy",
+      cspHeader.replace(/\s{2,}/g, " ").trim(),
+    );
+  }
 
   return response;
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    {
+      source: "/((?!api|_next/static|_next/image|favicon.ico).*)",
+      missing: [
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
+      ],
+    },
+  ],
 };
