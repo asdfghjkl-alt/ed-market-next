@@ -21,13 +21,14 @@ export async function generateMetadata(
   const { id } = await params;
   await connectToDatabase();
 
-  const product = await Product.findById(id);
+  let product = await Product.findById(id);
 
   if (!product) {
     return {
       title: "Product Not Found",
     };
   }
+  product = JSON.parse(JSON.stringify(product));
 
   const previousImages = (await parent).openGraph?.images || [];
 
