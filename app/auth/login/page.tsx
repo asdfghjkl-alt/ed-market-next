@@ -5,11 +5,11 @@ import Link from "next/link";
 import Joi from "joi";
 import type { LoginFormData } from "@/types/auth";
 import { useState } from "react";
-import { AxiosError } from "axios";
 import InputField from "@/components/ui/inputs/InputField";
-import { redirect } from "next/navigation";
-import { signIn } from "@/utils/auth-client";
-import { useSession } from "@/utils/auth-client";
+import { redirect, useRouter } from "next/navigation";
+import { signIn, useSession } from "@/utils/auth-client";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const loginSchema = Joi.object({
   email: Joi.string().required().email().messages({
@@ -22,6 +22,15 @@ const loginSchema = Joi.object({
 });
 
 export default function Login() {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.replace("/");
+    }
+  }, [session, router]);
+
   const {
     register,
     handleSubmit,
@@ -33,16 +42,14 @@ export default function Login() {
     defaultValues: { email: "", password: "" },
   });
 
-  const [errMsg, setErrMsg] = useState<string | undefined>(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   async function onSubmit(data: LoginFormData) {
     setIsLoggingIn(true);
-    setErrMsg(undefined);
 
     const { data: retrieved, error } = await signIn.email(data);
     if (error) {
-      setErrMsg(error.message);
+      toast.error(error.message || "Something went wrong");
       setIsLoggingIn(false);
       reset();
     } else {
@@ -56,7 +63,6 @@ export default function Login() {
       <div className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-md">
         <h3>Login to EdMarket</h3>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <p className="text-red-500">{errMsg}</p>
           <InputField
             name="email"
             placeholder="Email"

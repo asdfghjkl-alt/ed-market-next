@@ -6,8 +6,10 @@ import Joi from "joi";
 import type { RegisterFormData } from "@/types/auth";
 import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
-import { redirect } from "next/navigation";
-import { signUp } from "@/utils/auth-client";
+import { redirect, useRouter } from "next/navigation";
+import { signUp, useSession } from "@/utils/auth-client";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const registerSchema = Joi.object({
   name: Joi.string()
@@ -23,6 +25,15 @@ const registerSchema = Joi.object({
 });
 
 export default function Register() {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.replace("/");
+    }
+  }, [session, router]);
+
   const {
     register,
     handleSubmit,
@@ -33,17 +44,15 @@ export default function Register() {
     mode: "onTouched",
     defaultValues: { name: "", password: "", email: "" },
   });
-  const [errMsg, setErrMsg] = useState<string | undefined>(undefined);
   const [isRegistering, setIsRegistering] = useState(false);
 
   async function onSubmit(data: RegisterFormData) {
     setIsRegistering(true);
-    setErrMsg(undefined);
 
     const { data: retrieved, error } = await signUp.email(data);
 
     if (error) {
-      setErrMsg(error.message);
+      toast.error(error.message || "Something went wrong");
       setIsRegistering(false);
       reset();
     } else {
@@ -66,7 +75,6 @@ export default function Register() {
           </Link>
         </p>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <p className="text-red-500">{errMsg}</p>
           <InputField
             name="email"
             placeholder="Email"
