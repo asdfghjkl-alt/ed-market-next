@@ -1,6 +1,7 @@
 import QuantityControl from "@/components/products/QuantityControl";
 import Carousel from "@/components/ui/Carousel";
 import { notFound } from "next/navigation";
+import { Metadata, ResolvingMetadata } from "next";
 import connectToDatabase from "@/lib/mongodb";
 import Product from "@/database/product.model";
 import User from "@/database/user.model";
@@ -12,6 +13,34 @@ const unitsToDisplay: Record<string, number> = {
   L: 1,
   each: 1,
 };
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ id: string }> },
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { id } = await params;
+  await connectToDatabase();
+
+  const product = await Product.findById(id);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${product.name} | EdMarket`,
+    description: product.description?.substring(0, 160),
+    openGraph: {
+      title: product.name,
+      description: product.description?.substring(0, 160),
+      images: [...(product.images || []), ...previousImages],
+    },
+  };
+}
 
 export default async function ProductDetails({
   params,

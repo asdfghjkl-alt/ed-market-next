@@ -17,9 +17,37 @@ const martianMono = Martian_Mono({
   subsets: ["latin"],
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string;
+
 export const metadata: Metadata = {
-  title: "EdMarket",
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "EdMarket",
+    template: "%s | EdMarket",
+  },
   description: "Your one-stop shop for all your grocery needs.",
+  openGraph: {
+    title: {
+      default: "EdMarket",
+      template: "%s | EdMarket",
+    },
+    description: "Your one-stop shop for all your grocery needs.",
+    siteName: "EdMarket",
+    locale: "en_AU",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: {
+      default: "EdMarket",
+      template: "%s | EdMarket",
+    },
+    description: "Your one-stop shop for all your grocery needs.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export const dynamic = "force-dynamic";
