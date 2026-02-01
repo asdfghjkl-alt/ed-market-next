@@ -20,7 +20,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
       <div className="flex h-full flex-col gap-20 p-3">
         <Link href={`/products/${product._id}`}>
           <Image
-            className="object-contain object-center"
+            className="mx-auto block object-contain object-center"
             src={product.images[0].thumbnail as string}
             alt={product.name}
             width={256}
