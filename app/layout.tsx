@@ -35,6 +35,7 @@ export const metadata: Metadata = {
     siteName: "EdMarket",
     locale: "en_AU",
     type: "website",
+    images: ["/brand.jpg"],
   },
   twitter: {
     card: "summary_large_image",
@@ -43,6 +44,7 @@ export const metadata: Metadata = {
       template: "%s | EdMarket",
     },
     description: "Your one-stop shop for all your grocery needs.",
+    images: ["/brand.jpg"],
   },
   robots: {
     index: true,
