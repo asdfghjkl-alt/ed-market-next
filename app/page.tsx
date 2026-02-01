@@ -18,8 +18,7 @@ export default function Home() {
         Your one-stop shop for all your grocery needs.
       </p>
       <p className="mt-4 max-w-2xl sm:mx-5 md:mx-30">
-        A full-stack e-commerce application built with MERN stack (MongoDB,
-        Express, React, Node.js) by Edward Liu.
+        A full-stack e-commerce application built with Next JS and MongoDB.
       </p>
       <p className="mt-4 max-w-2xl sm:mx-5 md:mx-30">
         The project constructs a full shopping website experience featuring
@@ -57,7 +56,7 @@ export default function Home() {
         <p>View Owner's LinkedIn</p>
       </Link>
       <Link
-        href="https://github.com/asdfghjkl-alt/EdMarket"
+        href="https://github.com/asdfghjkl-alt/ed-market-next"
         className="btn mt-4 flex items-center"
       >
         <Image src="/Github.png" alt="Github" height={50} width={50} />
