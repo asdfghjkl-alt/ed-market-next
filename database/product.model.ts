@@ -23,6 +23,7 @@ export interface IProduct {
   seller: IUser;
   category: ICategory;
   description: string;
+  slug: string;
 }
 
 export interface PassedProductData {
@@ -115,6 +116,25 @@ export const ProductSchema = new Schema({
     type: String,
     required: true,
   },
+  slug: {
+    type: String,
+    unique: true,
+    sparse: true,
+  },
+});
+
+ProductSchema.pre("save", async function () {
+  // Generates slug if name modified or slug doesn't exist
+  if (this.isModified("name") || !this.slug) {
+    const slugName = this.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+
+    // Uses last 6 chars of the objectID to guarantee uniqueness
+    const suffix = this._id.toString().substring(18);
+    this.slug = `${slugName}-${suffix}`;
+  }
 });
 
 // Post middleware to delete images from Cloudinary when a product is deleted

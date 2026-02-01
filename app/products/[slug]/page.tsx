@@ -15,13 +15,13 @@ const unitsToDisplay: Record<string, number> = {
 };
 
 export async function generateMetadata(
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id } = await params;
+  const { slug } = await params;
   await connectToDatabase();
 
-  let product = await Product.findById(id);
+  let product = await Product.findOne({ slug });
 
   if (!product) {
     return {
@@ -46,12 +46,12 @@ export async function generateMetadata(
 export default async function ProductDetails({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
+  const { slug } = await params;
   await connectToDatabase();
   try {
-    let product = await Product.findById(id).populate({
+    let product = await Product.findOne({ slug }).populate({
       path: "seller",
       model: User,
       select: "email name",
