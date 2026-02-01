@@ -115,7 +115,6 @@ export default function ProductForm({
         const res = await api.post("/products", formData);
         toast.success(res.data.message);
       }
-      setIsSubmitting(false);
       router.push("/products/manage");
     } catch (e) {
       setIsSubmitting(false);
