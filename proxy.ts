@@ -9,7 +9,7 @@ export function proxy(request: NextRequest) {
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ""};
-    style-src 'self' ${isDev ? "'unsafe-inline'" : `'nonce-${nonce}'`};
+    style-src 'self' ${isDev ? "'unsafe-inline'" : `'nonce-${nonce}' 'strict dynamic'`};
     img-src 'self' blob: data: https://res.cloudinary.com;
     font-src 'self';
     object-src 'none';
