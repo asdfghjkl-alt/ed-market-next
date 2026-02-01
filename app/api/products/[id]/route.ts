@@ -8,26 +8,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { apiHandler } from "@/lib/api-handler";
 import { processProductImages, validateImages } from "../helpers";
-
-export const GET = apiHandler(
-  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
-    await connectToDatabase();
-    const { id } = await params;
-
-    const product = await Product.findById(id)
-      .populate({ path: "category", model: Category })
-      .populate({ path: "seller", select: "email", model: User });
-
-    if (!product) {
-      return notFound();
-    }
-
-    return NextResponse.json({
-      message: "Successfully retrieved product",
-      product,
-    });
-  },
-);
+import { IRole } from "@/types/auth";
 
 export const PUT = apiHandler(
   async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
@@ -39,6 +20,15 @@ export const PUT = apiHandler(
         { message: "Page does not exist" },
         { status: 404 },
       );
+    }
+
+    const foundUser = await User.findById(session.user.id);
+
+    if (
+      !foundUser ||
+      (foundUser.role !== IRole.seller && foundUser.role !== IRole.admin)
+    ) {
+      return NextResponse.json({ message: "Page not found" }, { status: 404 });
     }
 
     const { id } = await params;
@@ -53,7 +43,7 @@ export const PUT = apiHandler(
 
     if (
       !product.seller.equals(session.user.id) &&
-      session.user.role !== "admin"
+      foundUser.role !== IRole.admin
     ) {
       return NextResponse.json(
         { message: "You are not authorized to update this product" },
@@ -123,6 +113,15 @@ export const DELETE = apiHandler(
       );
     }
 
+    const foundUser = await User.findById(session.user.id);
+
+    if (
+      !foundUser ||
+      (foundUser.role !== IRole.seller && foundUser.role !== IRole.admin)
+    ) {
+      return NextResponse.json({ message: "Page not found" }, { status: 404 });
+    }
+
     const { id } = await params;
     const product = await Product.findById(id);
 
@@ -135,7 +134,7 @@ export const DELETE = apiHandler(
 
     if (
       !product.seller.equals(session.user.id) &&
-      session.user.role !== "admin"
+      foundUser.role !== IRole.admin
     ) {
       return NextResponse.json(
         { message: "You are not authorized to delete this product" },

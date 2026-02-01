@@ -7,16 +7,20 @@ import { apiHandler } from "@/lib/api-handler";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { processProductImages, validateImages } from "./helpers";
+import { IRole } from "@/types/auth";
 
 export const POST = apiHandler(async (req: NextRequest) => {
   await connectToDatabase();
   const session = await auth.api.getSession({ headers: await headers() });
 
-  if (!session || session.user.role !== "seller") {
-    return NextResponse.json(
-      { message: "Page does not exist" },
-      { status: 404 },
-    );
+  if (!session) {
+    return NextResponse.json({ message: "Page not found" }, { status: 404 });
+  }
+
+  const foundUser = await User.findById(session.user.id);
+
+  if (!foundUser || foundUser.role !== IRole.seller) {
+    return NextResponse.json({ message: "Page not found" }, { status: 404 });
   }
 
   const formData = await req.formData();
@@ -49,8 +53,6 @@ export const POST = apiHandler(async (req: NextRequest) => {
     seller: session.user.id,
     images,
   });
-
-  await newProduct.save();
 
   return NextResponse.json({
     message: "Successfully added new product",
