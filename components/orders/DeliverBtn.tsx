@@ -8,7 +8,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function DeliverBtn({ order }: { order: IOrder }) {
-  console.log(order);
   const [isMarking, setIsMarking] = useState(false);
   const router = useRouter();
 
