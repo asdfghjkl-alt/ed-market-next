@@ -3,6 +3,7 @@ import Order, { IOrder } from "@/database/order.model";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import OrderDetails from "@/components/orders/OrderDetails";
+import User from "@/database/user.model";
 
 export default async function UserOrders() {
   await connectToDatabase();
@@ -12,7 +13,10 @@ export default async function UserOrders() {
     return <div>Please login to view your orders</div>;
   }
 
-  let orders = await Order.find({ user: session.user.id });
+  let orders = await Order.find({ user: session.user.id }).populate({
+    path: "user",
+    model: User,
+  });
   orders = JSON.parse(JSON.stringify(orders));
 
   return orders.length === 0 ? (
