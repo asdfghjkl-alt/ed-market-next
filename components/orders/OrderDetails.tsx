@@ -30,16 +30,14 @@ export default function OrderDetails({
             Delivered{" "}
             <span className="text-black">
               on{" "}
-              {new Date(order.completionDate as Date).toLocaleString(
-                undefined,
-                {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                },
-              )}
+              {new Date(order.completionDate as Date).toLocaleString("en-AU", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              })}
             </span>
           </>
         ) : (
@@ -48,12 +46,13 @@ export default function OrderDetails({
       </p>
       <p className="text-right">
         Ordered on{" "}
-        {new Date(order.date).toLocaleString(undefined, {
+        {new Date(order.date).toLocaleString("en-AU", {
           year: "numeric",
           month: "numeric",
           day: "numeric",
           hour: "numeric",
           minute: "numeric",
+          hour12: true,
         })}
       </p>
       <p className="text-right mb-2">Ordered by {(order.user as IUser).name}</p>
