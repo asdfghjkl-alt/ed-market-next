@@ -36,6 +36,13 @@ export default function Home() {
         admins can delete any products, manage orders, manage user roles and add
         product categories.
       </p>
+      <p className="mt-4 max-w-2xl sm:mx-5 md:mx-30">
+        Additional note that the products displayed are purely sample data
+        extracted from the Coles website, and not to be taken as a real product
+        sold. The project is only a demo of a full-stack e-commerce application,
+        and doesn't include payment options and nor should you expect products
+        to be delivered.
+      </p>
       <Link
         href="/products"
         className="btn mt-4 flex items-center bg-blue-600 p-3 text-blue-100"
