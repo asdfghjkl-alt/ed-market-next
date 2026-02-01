@@ -16,47 +16,54 @@ export default function OrderDetails({
       {order.cart.map((item) => (
         <OrderItem key={item.product._id} item={item} />
       ))}
-      <p className="text-bold m-2 border-t-4 text-right text-2xl">
-        Total Cost: $
-        {order.cart
-          .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-          .toFixed(2)}
-      </p>
-      <p
-        className={`text-right font-semibold ${order.completed ? "text-green-500" : "text-red-400"}`}
-      >
-        {order.completed ? (
-          <>
-            Delivered{" "}
-            <span className="text-black">
-              on{" "}
-              {new Date(order.completionDate as Date).toLocaleString("en-AU", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              })}
-            </span>
-          </>
-        ) : (
-          <>Undelivered</>
-        )}
-      </p>
-      <p className="text-right">
-        Ordered on{" "}
-        {new Date(order.date).toLocaleString("en-AU", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          hour12: true,
-        })}
-      </p>
-      <p className="text-right mb-2">Ordered by {(order.user as IUser).name}</p>
-      {isManaging && <DeliverBtn order={order} />}
+      <div className="mt-auto">
+        <p className="text-bold m-2 border-t-4 text-right text-2xl">
+          Total Cost: $
+          {order.cart
+            .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+            .toFixed(2)}
+        </p>
+        <p
+          className={`text-right font-semibold ${order.completed ? "text-green-500" : "text-red-400"}`}
+        >
+          {order.completed ? (
+            <>
+              Delivered{" "}
+              <span className="text-black">
+                on{" "}
+                {new Date(order.completionDate as Date).toLocaleString(
+                  "en-AU",
+                  {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                  },
+                )}
+              </span>
+            </>
+          ) : (
+            <>Undelivered</>
+          )}
+        </p>
+        <p className="text-right">
+          Ordered on{" "}
+          {new Date(order.date).toLocaleString("en-AU", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+          })}
+        </p>
+        <p className="text-right mb-2">
+          Ordered by {(order.user as IUser).name}
+        </p>
+        {isManaging && <DeliverBtn order={order} />}
+      </div>
     </div>
   );
 }
