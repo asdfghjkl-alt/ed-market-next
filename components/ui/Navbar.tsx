@@ -3,10 +3,8 @@ import { useState } from "react";
 import NavLink from "./NavLink";
 import CartLink from "./CartLink";
 import Image from "next/image";
-import { signOut, useSession } from "@/utils/auth-client";
+import { signOut, useSession } from "@/lib/auth-client";
 import Dropdown from "./Dropdown";
-import api from "@/lib/axios";
-import { useOrder } from "@/contexts/OrderContext";
 
 const navLinks = [
   { href: "/", label: "Home" },

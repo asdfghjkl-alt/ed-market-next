@@ -7,7 +7,7 @@ import type { RegisterFormData } from "@/types/auth";
 import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
 import { redirect, useRouter } from "next/navigation";
-import { signUp, useSession } from "@/utils/auth-client";
+import { signUp, useSession } from "@/lib/auth-client";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
