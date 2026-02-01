@@ -1,7 +1,6 @@
 "use client";
 
 import { IOrder } from "@/database/order.model";
-import { IUser } from "@/database/user.model";
 import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";

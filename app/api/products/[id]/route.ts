@@ -2,7 +2,6 @@ import Product, { IImage } from "@/database/product.model";
 import { NextRequest, NextResponse } from "next/server";
 import Category from "@/database/category.model";
 import User from "@/database/user.model";
-import { notFound } from "next/navigation";
 import connectToDatabase from "@/lib/mongodb";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";

@@ -41,8 +41,8 @@ export default function AddCategoryForm() {
     setIsSubmitting(true);
     try {
       // Attempts to add new category
-      const { data: response } = await api.post("/categories", data);
-      toast.success("Category added successfully");
+      const response = await api.post("/categories", data);
+      toast.success(response.data.message);
       reset();
       router.refresh();
     } catch (e) {

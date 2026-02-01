@@ -1,6 +1,7 @@
 import { IProduct } from "@/database/product.model";
 import Link from "next/link";
 import QuantityControl from "./QuantityControl";
+import Image from "next/image";
 
 const unitsToDisplay: Record<string, number> = {
   g: 100,
@@ -18,9 +19,12 @@ export default function ProductCard({ product }: { product: IProduct }) {
     <div className="m-2 h-full rounded-xl border border-solid border-gray-300 text-left shadow-sm transition-shadow hover:shadow-lg">
       <div className="flex h-full flex-col gap-20 p-3">
         <Link href={`/products/${product._id}`}>
-          <img
-            className="h-50 w-full object-contain object-center"
-            src={product.images[0].display}
+          <Image
+            className="object-contain object-center"
+            src={product.images[0].thumbnail as string}
+            alt={product.name}
+            width={256}
+            height={256}
           />
           <p className="font-semibold">
             {product.name} | {product.quantity}

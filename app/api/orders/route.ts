@@ -1,5 +1,5 @@
 import Order, { ICartItem } from "@/database/order.model";
-import Product, { IProduct } from "@/database/product.model";
+import Product from "@/database/product.model";
 import { apiHandler } from "@/lib/api-handler";
 import connectToDatabase from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";

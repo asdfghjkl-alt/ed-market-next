@@ -47,7 +47,7 @@ export default function Login() {
   async function onSubmit(data: LoginFormData) {
     setIsLoggingIn(true);
 
-    const { data: retrieved, error } = await signIn.email(data);
+    const { error } = await signIn.email(data);
     if (error) {
       toast.error(error.message || "Something went wrong");
       setIsLoggingIn(false);

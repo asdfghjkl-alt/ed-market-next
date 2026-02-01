@@ -1,4 +1,5 @@
 import type { ICartItemFrontend } from "@/database/order.model";
+import Image from "next/image";
 
 export default function OrderItem({ item }: { item: ICartItemFrontend }) {
   return (
@@ -6,9 +7,12 @@ export default function OrderItem({ item }: { item: ICartItemFrontend }) {
       key={item.product._id}
       className="grid grid-cols-5 items-center border-t p-1"
     >
-      <img
+      <Image
         className="object-contain object-center"
-        src={item.product.images[0].thumbnail}
+        src={item.product.images[0].thumbnail as string}
+        alt={item.product.name}
+        width={50}
+        height={50}
       />
       <div className="col-span-2 flex flex-col">
         <span className="font-semibold text-gray-800">{item.product.name}</span>

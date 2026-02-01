@@ -7,15 +7,20 @@ import type { IProduct } from "@/database/product.model";
 
 export const OrderProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<ICartItemFrontend[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
+    // Use initialised variable to prevent race condition
+    setIsInitialized(true);
   }, []);
 
   useEffect(() => {
+    if (!isInitialized) return;
     // Immediately updates local storage cart to the cart in context
     localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+  }, [cart, isInitialized]);
 
   /**
    * Function to add an item to the cart

@@ -1,17 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 
-type ApiHandler = (
-  req: NextRequest,
-  ...args: any[]
-) => Promise<NextResponse | Response>;
+interface ApiError extends Error {
+  statusCode?: number;
+  code?: number | string;
+  keyValue?: Record<string, unknown>;
+  errors?: Record<string, unknown>;
+}
 
+/**
+ * Wrapper function to handle any errors encountered in the handler
+ * @param handler Request handler that is inputted into api handler
+ * @returns
+ */
 export const apiHandler =
-  (handler: ApiHandler) =>
-  async (req: NextRequest | Request, ...args: any[]) => {
+  <TArgs extends unknown[]>(
+    handler: (
+      req: NextRequest,
+      ...args: TArgs
+    ) => Promise<NextResponse | Response>,
+  ) =>
+  async (req: NextRequest | Request, ...args: TArgs) => {
     try {
       return await handler(req as NextRequest, ...args);
-    } catch (error: any) {
-      console.error("API Error:", error);
+    } catch (err) {
+      const error = err as ApiError;
 
       const statusCode = error.statusCode || 500;
       const message = error.message || "Internal Server Error";
@@ -25,7 +37,7 @@ export const apiHandler =
       }
 
       // Handle Mongoose Duplicate Key Errors
-      if (error.code === 11000) {
+      if (error.code === 11000 && error.keyValue) {
         return NextResponse.json(
           {
             message: "Duplicate value entered",

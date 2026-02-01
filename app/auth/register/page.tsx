@@ -49,7 +49,7 @@ export default function Register() {
   async function onSubmit(data: RegisterFormData) {
     setIsRegistering(true);
 
-    const { data: retrieved, error } = await signUp.email(data);
+    const { error } = await signUp.email(data);
 
     if (error) {
       toast.error(error.message || "Something went wrong");

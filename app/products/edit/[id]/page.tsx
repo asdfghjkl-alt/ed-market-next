@@ -13,6 +13,10 @@ export default async function EditProduct({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
+  let passedCategories: string[];
+  let serializedProduct: PassedProductData;
+
   await connectToDatabase();
   try {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -20,7 +24,7 @@ export default async function EditProduct({
       return notFound();
     }
 
-    let product = await Product.findById(id)
+    const product = await Product.findById(id)
       .populate({
         path: "seller",
         model: User,
@@ -39,7 +43,7 @@ export default async function EditProduct({
       return notFound();
     }
 
-    const serializedProduct: PassedProductData = {
+    serializedProduct = {
       _id: product._id.toString(),
       name: product.name,
       quantity: product.quantity,
@@ -51,14 +55,13 @@ export default async function EditProduct({
     };
 
     const categories = await Category.find();
-    const passedCategories = categories.map(
-      (category: ICategory) => category.name,
-    );
-
-    return (
-      <ProductForm product={serializedProduct} categories={passedCategories} />
-    );
+    passedCategories = categories.map((category: ICategory) => category.name);
   } catch (error) {
+    console.error(error);
     return notFound();
   }
+
+  return (
+    <ProductForm product={serializedProduct} categories={passedCategories} />
+  );
 }

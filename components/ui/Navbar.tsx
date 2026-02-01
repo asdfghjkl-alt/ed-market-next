@@ -5,6 +5,7 @@ import CartLink from "./CartLink";
 import Image from "next/image";
 import { signOut, useSession } from "@/lib/auth-client";
 import Dropdown from "./Dropdown";
+import { ICategory } from "@/database/category.model";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -23,7 +24,11 @@ const sellerLinks = [{ href: "/products/manage", label: "Manage Products" }];
 export const linkBaseClass =
   "tracking-wide px-5 py-2 rounded-xl text-teal-50 hover:bg-sky-600 transition-colors";
 
-export default function Navbar({ categories = [] }: { categories?: any[] }) {
+export default function Navbar({
+  categories = [],
+}: {
+  categories?: ICategory[];
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((open) => !open);
@@ -33,6 +38,7 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
 
   const userElements = [
     <button
+      key="logout"
       onClick={() => signOut()}
       className="block w-full text-left text-sm font-bold text-gray-300 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
     >

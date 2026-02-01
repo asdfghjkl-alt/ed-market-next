@@ -53,7 +53,7 @@ export default function Home() {
           width={40}
           style={{ width: "auto" }}
         />
-        <p>View Owner's LinkedIn</p>
+        <p>View Owner&apos;s LinkedIn</p>
       </Link>
       <Link
         href="https://github.com/asdfghjkl-alt/ed-market-next"

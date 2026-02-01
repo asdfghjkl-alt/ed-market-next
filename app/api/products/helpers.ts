@@ -60,7 +60,7 @@ export const validateImages = (
   initFileSizes: number,
 ) => {
   // Validates that there exists at least one file uploaded
-  if (files.length + initNoFiles < 0) {
+  if (files.length + initNoFiles <= 0) {
     return { message: `Need at least one image` };
   }
   // Validates that total no of files doesn't exceed max

@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import connectToDatabase from "@/lib/mongodb";
 import { notFound } from "next/navigation";
-import Product, { IProduct, PassedProductData } from "@/database/product.model";
+import Product, { IProduct } from "@/database/product.model";
 import Link from "next/link";
 import { ProductManageView } from "@/components/products/ProductManageView";
 import Category from "@/database/category.model";

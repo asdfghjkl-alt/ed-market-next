@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Joi from "joi";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AxiosError } from "axios";
 import InputField from "@/components/ui/inputs/InputField";
 import api from "@/lib/axios";
@@ -44,11 +44,6 @@ export default function ProductForm({
     category: Joi.string().required().messages({
       "string.empty": "Please enter a category",
     }),
-    images: product
-      ? Joi.array()
-      : Joi.array().min(1).required().messages({
-          "array.min": "Please upload at least one image",
-        }),
     unit: Joi.string()
       .valid(...allowedUnits)
       .required()
@@ -66,8 +61,6 @@ export default function ProductForm({
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
     setError,
     formState: { errors },
   } = useForm<ProductFormData>({
@@ -78,16 +71,12 @@ export default function ProductForm({
       price: product?.price || 0,
       quantity: product?.quantity || 0,
       unit: product?.unit || allowedUnits[0],
-      images: [],
       description: product?.description || "",
     },
   });
 
-  useEffect(() => {
-    register("images");
-  }, [register]);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [images, setImages] = useState<File[]>([]);
 
   async function onSubmit(data: ProductFormData) {
     try {
@@ -125,8 +114,6 @@ export default function ProductForm({
       }
     }
   }
-
-  const images = watch("images");
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center">
@@ -243,9 +230,7 @@ export default function ProductForm({
                   });
                 }
 
-                setValue("images", [...images, ...files], {
-                  shouldValidate: true,
-                });
+                setImages((prevImages) => [...prevImages, ...files]);
                 e.target.value = "";
               }}
               className="w-full rounded border border-gray-300 p-2"
@@ -262,9 +247,11 @@ export default function ProductForm({
                   <button
                     type="button"
                     onClick={() => {
-                      const newImages = [...images];
-                      newImages.splice(index, 1);
-                      setValue("images", newImages);
+                      setImages((prevImages) => {
+                        const newImages = [...prevImages];
+                        newImages.splice(index, 1);
+                        return newImages;
+                      });
                     }}
                     className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-center text-xs leading-none text-red-500 shadow-sm transition-colors hover:bg-red-300"
                   >
@@ -278,11 +265,6 @@ export default function ProductForm({
                 </div>
               ))}
             </div>
-            {errors.images && (
-              <p className="mt-1 text-xs text-red-500">
-                {errors.images.message}
-              </p>
-            )}
           </div>
           <TextArea
             name="description"

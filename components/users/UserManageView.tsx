@@ -31,7 +31,7 @@ export default function UserManageView({
       const res = await api.put(`/users/${userId}/${changedRole}`);
       toast.success(res.data.message);
       router.refresh();
-    } catch (err: any) {
+    } catch (err) {
       if (err instanceof AxiosError) {
         toast.error(err.response?.data.message || err.message);
       } else {
