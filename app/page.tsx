@@ -11,6 +11,7 @@ export default function Home() {
         alt="Logo"
         height={200}
         width={200}
+        loading="eager"
         priority={true}
       />
       <h1 className="mt-4">Welcome to EdMarket!</h1>
@@ -58,7 +59,7 @@ export default function Home() {
           alt="LinkedIn"
           height={50}
           width={40}
-          style={{ width: "auto" }}
+          className="w-auto"
         />
         <p>View Owner&apos;s LinkedIn</p>
       </Link>
