@@ -6,7 +6,7 @@ import Joi from "joi";
 import type { LoginFormData } from "@/types/auth";
 import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { signIn, useSession } from "@/lib/auth-client";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
@@ -53,7 +53,8 @@ export default function Login() {
       setIsLoggingIn(false);
       reset();
     } else {
-      redirect("/");
+      toast.success("Login successful");
+      router.push("/");
     }
   }
 

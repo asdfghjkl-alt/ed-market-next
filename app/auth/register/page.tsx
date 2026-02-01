@@ -6,7 +6,7 @@ import Joi from "joi";
 import type { RegisterFormData } from "@/types/auth";
 import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { signUp, useSession } from "@/lib/auth-client";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
@@ -56,7 +56,8 @@ export default function Register() {
       setIsRegistering(false);
       reset();
     } else {
-      redirect("/");
+      toast.success("Registration successful");
+      router.push("/");
     }
   }
 
